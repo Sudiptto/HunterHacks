@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 # hello world route
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', api_key=api_key, moderator_pin=moderator_pin)  # pass the keys to the template
 
 
 # run the app
