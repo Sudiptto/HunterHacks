@@ -3,3 +3,4 @@ passwords.py
 env
 instance
 __pycache__
+database.db

@@ -18,6 +18,6 @@ db = SQLAlchemy(app)
 # Import models after db is set up and instance folder exists
 import models  
 
-#  craete the database
+#  create the database
 with app.app_context():
     db.create_all()
