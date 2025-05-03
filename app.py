@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from passwords import *
 
@@ -27,16 +27,23 @@ def submit_data():
     description 
     '''
 
-    # print the data (latitude, longitude , zipcode & description) to the console for now
+    data = request.get_json()  # This parses the incoming JSON
+
+    # Access individual fields
+    latitude = data.get('latitude')
+    longitude = data.get('longitude')
+    zipcode = data.get('zipcode')
+    description = data.get('description')
+
+    # Print the fields to console
     print("GOT DATA")
+    print("Latitude:", latitude)
+    print("Longitude:", longitude)
+    print("Zipcode:", zipcode)
+    print("Description:", description)
 
-    print("Latitude: ", request.form.get('latitude'))
-    print("Longitude: ", request.form.get('longitude'))
-    print("Zipcode: ", request.form.get('zipcode'))
-    print("Description: ", request.form.get('description'))
-
-
-    pass
+    # Optionally return a success response
+    return jsonify({"status": "success", "message": "Data received"})
 
 
 # run the app
