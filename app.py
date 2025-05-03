@@ -1,51 +1,23 @@
-from flask import Flask, redirect, render_template, request, jsonify
+import os
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from passwords import *
+from passwords import secret_key
 
-# set up the app / database (IE: Filler)
-app = Flask(__name__)
-app.config['SECRET_KEY'] = secret_key # note make sure this secret key is hidden at all times
+app = Flask(__name__, instance_relative_config=True)
+app.config['SECRET_KEY'] = secret_key
+# Build an absolute path to the database file in the instance folder 
+# NOTE FOR SASHA & SAMIN -> BUILDING THE DATABASE IN THE INSTANCE FOLDER IS IMPORTANT FOR DEPLOYMENT
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # initialize flask sql database
+
+# Ensure the instance folder exists
+os.makedirs(app.instance_path, exist_ok=True)
+
 db = SQLAlchemy(app)
 
+# Import models after db is set up and instance folder exists
+import models  
 
-# hello world route
-@app.route('/')
-def home():
-    return render_template('index.html', api_key=api_key, moderator_pin=moderator_pin)  # pass the keys to the template
-
-
-# route to grab data & add to dattabase (for now just return the latitue, longitude, and notes)
-@app.route('/submitData', methods=['POST'])
-def submit_data():
-    # data being collected 
-    '''
-    latitude
-    longitude
-    zipcode
-    description 
-    '''
-
-    data = request.get_json()  # This parses the incoming JSON
-
-    # Access individual fields
-    latitude = data.get('latitude')
-    longitude = data.get('longitude')
-    zipcode = data.get('zipcode')
-    description = data.get('description')
-
-    # Print the fields to console
-    print("GOT DATA")
-    print("Latitude:", latitude)
-    print("Longitude:", longitude)
-    print("Zipcode:", zipcode)
-    print("Description:", description)
-
-    # Optionally return a success response
-    return jsonify({"status": "success", "message": "Data received"})
-
-
-# run the app
-if __name__ == '__main__':
-    app.run(debug=True)
+#  craete the database
+with app.app_context():
+    db.create_all()

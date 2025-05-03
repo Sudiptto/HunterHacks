@@ -1,3 +1,5 @@
 pycache
 passwords.py 
 env
+instance
+__pycache__
