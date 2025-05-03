@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from passwords import *
 
@@ -19,7 +19,22 @@ def home():
 # route to grab data & add to dattabase (for now just return the latitue, longitude, and notes)
 @app.route('/submitData', methods=['POST'])
 def submit_data():
-    
+    # data being collected 
+    '''
+    latitude
+    longitude
+    zipcode
+    description 
+    '''
+
+    # print the data (latitude, longitude , zipcode & description) to the console for now
+    print("GOT DATA")
+
+    print("Latitude: ", request.form.get('latitude'))
+    print("Longitude: ", request.form.get('longitude'))
+    print("Zipcode: ", request.form.get('zipcode'))
+    print("Description: ", request.form.get('description'))
+
 
     pass
 

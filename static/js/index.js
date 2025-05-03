@@ -24,6 +24,10 @@ setTimeout(function(){
       mapTypeId: 'satellite' 
       // fullscreenControl: false
     });
+    const locationButton = document.createElement("button");
+    locationButton.textContent = "Current Location";
+    locationButton.classList.add("center-button");
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(locationButton);
     infoWindow = new google.maps.InfoWindow();
 
     /*ADDED A LEGEND TO THE MAPS -> NOTE FOR SASHA & SAMIN -> HERE YOU CAN EDIT THE STYLES OF THE KEY APPEARING ON THE TOP LEFT */
@@ -116,8 +120,19 @@ setTimeout(function(){
   
       let geocoder = new google.maps.Geocoder();
       let latLng = event.latLng;
+
+      // sample alert prompts
+      let description = prompt("Please enter a description for this location:");
+      if (!description) {
+        alert("Description required to add a marker.");
+        return; // exit early
+      }
+
       
-    
+      
+      /*NOTE FOR SASHA & SAMIN -> THIS FUNCTION IS VERY IMPORTANT IT GRABS THE DATA WHEN THE USER DOUBLE CLICKS & SENDS IT TO THE BACKEND THROUGH THE /SUBMITDATA ROUTE */
+      /* CURRENTLY USING THE LOCATIONDATA OBJECT TO STORE DATA INSIDE */
+      
       // Send a geocoding request to Google Maps Geocoding API.
       geocoder.geocode({ location: latLng }, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK) {
@@ -133,11 +148,32 @@ setTimeout(function(){
             latitude: latitude,
             longitude: longitude,
             zipcode: zipcode,
+            description: description
           };
+          
+          // Send the location data to the server using a fetch request.
+          fetch('/submitData', {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify(locationData),
+            headers: { 'Content-Type': 'application/json' }
+          }).then(() => location.reload());
+        
           
         }
       });
-      })
+       // Helper function to find the zipcode from geocoding results.
+      function findZipCodeInResults(geocodeResult) {
+        for (let component of geocodeResult.address_components) {
+          if (component.types.includes('postal_code')) {
+            return component.short_name;
+          }
+        }
+        return null; // Return null if no zipcode is found.
+      }})
+      
+      
+      
      
   }
   
