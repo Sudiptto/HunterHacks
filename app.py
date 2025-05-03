@@ -16,6 +16,14 @@ def home():
     return render_template('index.html', api_key=api_key, moderator_pin=moderator_pin)  # pass the keys to the template
 
 
+# route to grab data & add to dattabase (for now just return the latitue, longitude, and notes)
+@app.route('/submitData', methods=['POST'])
+def submit_data():
+    
+
+    pass
+
+
 # run the app
 if __name__ == '__main__':
     app.run(debug=True)
