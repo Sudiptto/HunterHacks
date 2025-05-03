@@ -38,6 +38,17 @@ def submit_data():
     # Optionally return a success response
     return jsonify({"status": "success", "message": "Data received"})
 
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    
+
+@app.route('/addLocation', methods=['POST'])
+def add_location():
+    
+
 
 # run the app
 if __name__ == '__main__':
