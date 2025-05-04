@@ -46,6 +46,7 @@ def submit_data():
     zipcode = data.get('zipcode')
     description = data.get('description')
 
+    
     # Print the fields to console
     print("GOT DATA")
     print("Latitude:", latitude)
@@ -115,7 +116,6 @@ def logout():
 # @app.route('/addLocation', methods=['POST'])
 # def add_location():
     
-
 
 # run the app
 if __name__ == '__main__':
